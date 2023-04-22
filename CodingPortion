@@ -1,0 +1,119 @@
+#include <iostream>
+using namespace std;
+
+// Node class for binary search tree
+class Node {
+public:
+    int data;
+    Node* left;
+    Node* right;
+    Node(int data) {
+        this->data = data;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+// Insert 
+Node* insert(Node* root, int data) {
+    if (root == NULL) {
+        return new Node(data);
+    }
+    if (data < root->data) {
+        root->left = insert(root->left, data);
+    }
+    else {
+        root->right = insert(root->right, data);
+    }
+    return root;
+}
+
+// InOrder  
+void inOrder(Node* root) {
+    if (root != NULL) {
+        inOrder(root->left);
+        cout << root->data << " ";
+        inOrder(root->right);
+    }
+}
+
+// PreOrder  
+void preOrder(Node* root) {
+    if (root != NULL) {
+        cout << root->data << " ";
+        preOrder(root->left);
+        preOrder(root->right);
+    }
+}
+
+// PostOrder  
+void postOrder(Node* root) {
+    if (root != NULL) {
+        postOrder(root->left);
+        postOrder(root->right);
+        cout << root->data << " ";
+    }
+}
+
+// DFS function to search for a node
+bool dfs(Node* root, int data, string& path) {
+    if (root == NULL) {
+        return false;
+    }
+    path += to_string(root->data) + "->";
+    if (root->data == data) {
+        return true;
+    }
+    if (data < root->data) {
+        return dfs(root->left, data, path);
+    }
+    else {
+        return dfs(root->right, data, path);
+    }
+}
+
+int main() {
+    Node* root = NULL;
+    int arr[] = {6, 2, 8, 1, 4, 7, 9, 3, 5};
+    for (int i = 0; i < 9; i++) {
+        root = insert(root, arr[i]);
+    }
+
+    // InOrder 
+    cout << "InOrder traversal: ";
+    inOrder(root);
+    cout << endl;
+
+    // PreOrder 
+    cout << "PreOrder traversal: ";
+    preOrder(root);
+    cout << endl;
+
+    // PostOrder 
+    cout << "PostOrder traversal: ";
+    postOrder(root);
+    cout << endl;
+
+    // DFS search for 3
+    string path;
+    if (dfs(root, 3, path)) {
+        path.erase(path.size()-2); //Gets rid of extra ->
+        cout << "3 was found. The DFS algorithm searching path is: " << path << endl;
+    }
+    else {
+        path.erase(path.size()-2); //Gets rid of extra ->
+        cout << "3 was not in this tree. The DFS algorithm searching path is: " << path << endl;
+    }
+
+    // DFS search for 10
+    path = "";
+    if (dfs(root, 10, path)) {
+        path.erase(path.size()-2); //Gets rid of extra ->
+        cout << "10 was found. The DFS algorithm searching path is: " << path << endl;
+    }
+    else {
+        path.erase(path.size()-2); //Gets rid of extra ->
+        cout << "10 was not in this tree. The DFS algorithm searching path is: " << path << endl;
+    }
+    return -99; //Dead code but if exectuted there was a mistake somewhere
+}
